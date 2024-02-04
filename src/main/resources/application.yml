@@ -1,0 +1,24 @@
+server:
+  port: 3030
+
+spring:
+  # Database config
+  datasource:
+    url: jdbc:mysql://localhost:3306/complaints?createDatabaseIfNotExist=true
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  main:
+    allow-circular-references: true
+
+## allow routes
+allowed:
+  routes:
+    post: /api/v1/auth/token,/api/v1/users
+    get: /api/v1/users/**,/actuator/**
+
+secret:
+  key: TfyZ0Ax+MPh2dRHleeofKHr5CnoCjDTZzWj2IHNTpuzbl/oV4jINjsVIxxuLD5xSO0lQ//gg7P7JNjZbpX+HXw==
