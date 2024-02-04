@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,4 +27,10 @@ public class User extends AbstractEntity {
             inverseJoinColumns = {@JoinColumn(name = "roles_id", referencedColumnName = "id")}
     )
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "users")
+    private List<Complaint> complaint;
+
+    private String privateKey;
+    private String publicKey;
 }

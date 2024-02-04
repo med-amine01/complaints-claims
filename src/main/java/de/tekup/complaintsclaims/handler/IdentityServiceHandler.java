@@ -55,10 +55,17 @@ public class IdentityServiceHandler {
         return serviceResponse;
     }
 
+    // Secret key Service Exception handler
+    @ExceptionHandler(SecretKeyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<?> handleSecretKeyException(SecretKeyException exception) {
+        return getServiceResponse(exception);
+    }
+
     // Authority Service Exception handler
     @ExceptionHandler(AuthorityServiceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<?> handleRoleServiceException(AuthorityServiceException exception) {
+    public ApiResponse<?> handleAuthorityServiceException(AuthorityServiceException exception) {
         return getServiceResponse(exception);
     }
 
