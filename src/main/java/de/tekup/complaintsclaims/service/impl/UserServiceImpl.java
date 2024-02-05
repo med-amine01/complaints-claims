@@ -82,8 +82,11 @@ public class UserServiceImpl implements UserService {
 
             // Creating secret keys
             KeyPair keyPair = secretKeyService.generateSecretKeys();
-            user.setPrivateKey(keyPair.getPrivate().toString());
-            user.setPublicKey(keyPair.getPublic().toString());
+            String privateKey = secretKeyService.encode(keyPair.getPrivate().getEncoded());
+            String publicKey = secretKeyService.encode(keyPair.getPublic().getEncoded());
+
+            user.setPrivateKey(privateKey);
+            user.setPublicKey(publicKey);
 
             return Mapper.userToUserResponse(userRepository.save(user));
         } catch (Exception exception) {

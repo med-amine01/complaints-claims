@@ -28,9 +28,12 @@ public class User extends AbstractEntity {
     )
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany
     private List<Complaint> complaint;
 
+    @Lob
     private String privateKey;
+
+    @Lob
     private String publicKey;
 }

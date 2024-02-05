@@ -9,6 +9,7 @@ import de.tekup.complaintsclaims.enums.Roles;
 import de.tekup.complaintsclaims.repository.AuthorityRepository;
 import de.tekup.complaintsclaims.repository.RoleRepository;
 import de.tekup.complaintsclaims.repository.UserRepository;
+import de.tekup.complaintsclaims.service.SecretKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,15 +28,14 @@ public class InitUsers {
 
     @Autowired
     private AuthorityRepository authorityRepository;
-
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private SecretKeyService secretKeyService;
 
     @Transactional
     @EventListener
@@ -49,12 +50,19 @@ public class InitUsers {
         if (null == roleAdmin) return;
 
         User admin = new User();
-        admin.setName("admin-01");
+        admin.setName("admin");
         admin.setPassword(passwordEncoder.encode("test"));
-        admin.setEmail("mad.chicken211@gmail.com");
+        admin.setEmail("admin@gmail.com");
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(roleAdmin);
         admin.setRoles(adminRoles);
+
+        KeyPair keyPair = secretKeyService.generateSecretKeys();
+        String privateKey = secretKeyService.encode(keyPair.getPrivate().getEncoded());
+        String publicKey = secretKeyService.encode(keyPair.getPublic().getEncoded());
+        admin.setPrivateKey(privateKey);
+        admin.setPublicKey(publicKey);
+
         if (userRepository.existsByName(admin.getName())) return;
 
         userRepository.save(admin);
