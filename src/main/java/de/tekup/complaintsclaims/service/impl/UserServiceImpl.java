@@ -10,6 +10,7 @@ import de.tekup.complaintsclaims.exception.RoleServiceException;
 import de.tekup.complaintsclaims.exception.UserServiceException;
 import de.tekup.complaintsclaims.repository.RoleRepository;
 import de.tekup.complaintsclaims.repository.UserRepository;
+import de.tekup.complaintsclaims.service.SecretKeyService;
 import de.tekup.complaintsclaims.service.UserService;
 import de.tekup.complaintsclaims.util.Mapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.KeyPair;
 import java.util.*;
 
 @Service
@@ -27,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final SecretKeyService secretKeyService;
 
     @Override
     public List<UserResponse> findUsers() {
@@ -76,6 +79,14 @@ public class UserServiceImpl implements UserService {
 
             // Set user roles (if not provided, assign USER_ROLE by default)
             user.setRoles(getRoles(userRequest));
+
+            // Creating secret keys
+            KeyPair keyPair = secretKeyService.generateSecretKeys();
+            String privateKey = secretKeyService.encode(keyPair.getPrivate().getEncoded());
+            String publicKey = secretKeyService.encode(keyPair.getPublic().getEncoded());
+
+            user.setPrivateKey(privateKey);
+            user.setPublicKey(publicKey);
 
             return Mapper.userToUserResponse(userRepository.save(user));
         } catch (Exception exception) {
