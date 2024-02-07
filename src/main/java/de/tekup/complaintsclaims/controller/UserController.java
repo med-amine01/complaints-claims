@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private static String SUCCESS = "SUCCESS";
+    private static final String SUCCESS = "SUCCESS";
 
     private final UserService userService;
 

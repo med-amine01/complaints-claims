@@ -12,12 +12,14 @@ import de.tekup.complaintsclaims.repository.RoleRepository;
 import de.tekup.complaintsclaims.repository.UserRepository;
 import de.tekup.complaintsclaims.service.SecretKeyService;
 import de.tekup.complaintsclaims.service.UserService;
+import de.tekup.complaintsclaims.util.JwtUtil;
 import de.tekup.complaintsclaims.util.Mapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.security.KeyPair;
 import java.util.*;
 
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final SecretKeyService secretKeyService;
+    private final JwtUtil jwtUtil;
 
     @Override
     public List<UserResponse> findUsers() {
@@ -117,5 +120,21 @@ public class UserServiceImpl implements UserService {
         });
 
         return persistedRoles;
+    }
+
+    @Override
+    public User getUserFromToken(String token) {
+        try {
+            String bearer = "Bearer ";
+            if (!token.startsWith(bearer)) {
+                throw new ValidationException("Invalid token");
+            }
+            String username = jwtUtil.getUsernameFromToken(token.replace(bearer, ""));
+
+            return userRepository.findByName(username)
+                    .orElseThrow(() -> new UserServiceException("User not found :: " + username));
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

@@ -18,7 +18,7 @@ public class SecretKeyService {
     public KeyPair generateSecretKeys() {
         try {
             KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(1024);
+            generator.initialize(4096);
 
             return generator.generateKeyPair();
         } catch (Exception exception) {

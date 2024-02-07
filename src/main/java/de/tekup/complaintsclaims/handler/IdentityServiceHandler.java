@@ -110,4 +110,10 @@ public class IdentityServiceHandler {
     public ApiResponse<?> handleBadCredentialsException(UsernameNotFoundException exception) {
         return getServiceResponse(exception);
     }
+
+    @ExceptionHandler(ComplaintServiceException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<?> handleBadCredentialsException(ComplaintServiceException exception) {
+        return getServiceResponse(exception);
+    }
 }
