@@ -25,7 +25,7 @@ public class ComplaintService {
     private final UserServiceImpl userService;
     private final SecretKeyService secretKeyService;
 
-    public Complaint saveComplaint(Complaint complaint, String token) {
+    public ComplaintResponse saveComplaint(Complaint complaint, String token) {
         try {
             User user = userService.getUserFromToken(token);
             String content = complaint.getContent();
@@ -34,7 +34,9 @@ public class ComplaintService {
             complaint.setUser(user);
             complaint.setContent(encryptedContent);
 
-            return complaintRepository.save(complaint);
+            Complaint savedComplaint = complaintRepository.save(complaint);
+
+            return Mapper.complaintToComplaintResponse(savedComplaint);
         } catch (Exception e) {
             throw new ComplaintServiceException(e.getMessage());
         }
@@ -44,7 +46,7 @@ public class ComplaintService {
         return complaintRepository.findAll().stream().map(Mapper::complaintToComplaintResponse).toList();
     }
 
-    public Complaint findComplaintById(Long complaintId, String token) {
+    public ComplaintResponse findComplaintById(Long complaintId, String token) {
         Complaint complaint = complaintRepository.findById(complaintId).orElseThrow(
                 () -> new ComplaintServiceException("complaint not found"));
 
@@ -61,7 +63,7 @@ public class ComplaintService {
         String decryptedContent = secretKeyService.decrypt(complaint.getContent(), privateKey);
         complaint.setContent(decryptedContent);
 
-        return complaint;
+        return Mapper.complaintToComplaintResponse(complaint);
     }
 
     public List<ComplaintResponse> findComplaintsByUser(String username) {

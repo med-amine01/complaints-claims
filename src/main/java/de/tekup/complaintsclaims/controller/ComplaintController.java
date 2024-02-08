@@ -19,11 +19,11 @@ public class ComplaintController {
     private final ComplaintService complaintService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Complaint>> createComplaint(@RequestBody Complaint complaint,
+    public ResponseEntity<ApiResponse<ComplaintResponse>> createComplaint(@RequestBody Complaint complaint,
                                                                   @RequestHeader("Authorization") String token) {
-        Complaint complaintResponse = complaintService.saveComplaint(complaint, token);
-        ApiResponse<Complaint> response = ApiResponse
-                .<Complaint>builder()
+        ComplaintResponse complaintResponse = complaintService.saveComplaint(complaint, token);
+        ApiResponse<ComplaintResponse> response = ApiResponse
+                .<ComplaintResponse>builder()
                 .status(SUCCESS)
                 .results(complaintResponse)
                 .build();
@@ -32,11 +32,11 @@ public class ComplaintController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Complaint>> getComplaintById(@PathVariable Long id,
+    public ResponseEntity<ApiResponse<ComplaintResponse>> getComplaintById(@PathVariable Long id,
                                                                    @RequestHeader("Authorization") String token) {
-        Complaint complaintResponse = complaintService.findComplaintById(id, token);
-        ApiResponse<Complaint> response = ApiResponse
-                .<Complaint>builder()
+        ComplaintResponse complaintResponse = complaintService.findComplaintById(id, token);
+        ApiResponse<ComplaintResponse> response = ApiResponse
+                .<ComplaintResponse>builder()
                 .status(SUCCESS)
                 .results(complaintResponse)
                 .build();
