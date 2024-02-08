@@ -89,6 +89,7 @@ public class Mapper {
 
     public static ComplaintResponse complaintToComplaintResponse(Complaint complaint) {
         ComplaintResponse complaintResponse = new ComplaintResponse();
+        complaintResponse.setId(complaint.getId());
         complaintResponse.setUsername(complaint.getUser().getName());
         complaintResponse.setUserEmail(complaint.getUser().getEmail());
         complaintResponse.setComplaintContent(complaint.getContent());

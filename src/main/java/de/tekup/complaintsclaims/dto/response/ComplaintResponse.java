@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ComplaintResponse {
+    private Long id;
     private String username;
     private String userEmail;
     private String complaintContent;
