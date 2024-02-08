@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tekup.complaintsclaims.dto.request.RoleRequest;
 import de.tekup.complaintsclaims.dto.request.UserRequest;
 import de.tekup.complaintsclaims.dto.response.AuthResponse;
+import de.tekup.complaintsclaims.dto.response.ComplaintResponse;
 import de.tekup.complaintsclaims.dto.response.RoleResponse;
 import de.tekup.complaintsclaims.dto.response.UserResponse;
+import de.tekup.complaintsclaims.entity.Complaint;
 import de.tekup.complaintsclaims.entity.Role;
 import de.tekup.complaintsclaims.entity.User;
 import lombok.extern.slf4j.Slf4j;
@@ -83,6 +85,17 @@ public class Mapper {
         authResponse.setAccessToken(token);
 
         return authResponse;
+    }
+
+    public static ComplaintResponse complaintToComplaintResponse(Complaint complaint) {
+        ComplaintResponse complaintResponse = new ComplaintResponse();
+        complaintResponse.setUsername(complaint.getUser().getName());
+        complaintResponse.setUserEmail(complaint.getUser().getEmail());
+        complaintResponse.setComplaintContent(complaint.getContent());
+        complaintResponse.setCreatedAt(complaint.getCreatedAt());
+        complaintResponse.setUpdatedAt(complaint.getUpdatedAt());
+
+        return complaintResponse;
     }
 
     public static String jsonToString(Object object) {

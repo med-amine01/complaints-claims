@@ -1,5 +1,6 @@
 package de.tekup.complaintsclaims.config;
 
+import de.tekup.complaintsclaims.enums.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,8 +46,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         httpSecurity.cors();
         httpSecurity.csrf().disable()
                 .authorizeRequests()
-                .antMatchers(webSecurityProperties.getAllowedPostRoutes()).permitAll()
+                .antMatchers(HttpMethod.POST, webSecurityProperties.getAllowedPostRoutes()).permitAll()
                 .antMatchers(HttpMethod.GET, webSecurityProperties.getAllowedGetRoutes()).permitAll()
+                .antMatchers(HttpMethod.GET, webSecurityProperties.getAllowedAdminGetRoutes()).hasAuthority(Roles.ROLE_ADMIN.name())
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
                 .and()

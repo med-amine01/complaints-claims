@@ -9,7 +9,7 @@ spring:
     password:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
   main:
     allow-circular-references: true
@@ -17,8 +17,11 @@ spring:
 ## allow routes
 allowed:
   routes:
-    post: /api/v1/auth/token,/api/v1/users
-    get: /api/v1/users/**,/actuator/**
+    public:
+      post: /api/v1/auth/token,/api/v1/users
+      get: /api/v1/users/**,/actuator/**
+    admin:
+      get: /api/v1/complaints
 
 secret:
   key: TfyZ0Ax+MPh2dRHleeofKHr5CnoCjDTZzWj2IHNTpuzbl/oV4jINjsVIxxuLD5xSO0lQ//gg7P7JNjZbpX+HXw==

@@ -62,10 +62,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.getUsernameFromToken(jwtToken);
 
-            } catch (IllegalArgumentException e) {
-                IdentityServiceHandler.handleOutsideScopeException(response, e);
-                return;
-            } catch (ExpiredJwtException e) {
+            } catch (IllegalArgumentException | ExpiredJwtException e) {
                 IdentityServiceHandler.handleOutsideScopeException(response, e);
                 return;
             }
